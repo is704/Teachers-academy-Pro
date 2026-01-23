@@ -1,0 +1,239 @@
+/* ====== الأنيميشن الأساسية ====== */
+@keyframes slideInFromLeft {
+    0% {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInFromRight {
+    0% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInFromTop {
+    0% {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInFromBottom {
+    0% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ====== فئات الأنيميشن ====== */
+.animate-slide-left {
+    animation: slideInFromLeft 0.5s ease-out;
+}
+
+.animate-slide-right {
+    animation: slideInFromRight 0.5s ease-out;
+}
+
+.animate-slide-top {
+    animation: slideInFromTop 0.5s ease-out;
+}
+
+.animate-slide-bottom {
+    animation: slideInFromBottom 0.5s ease-out;
+}
+
+.animate-fade-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.animate-pulse {
+    animation: pulse 2s infinite;
+}
+
+.animate-bounce {
+    animation: bounce 1s infinite;
+}
+
+.animate-rotate {
+    animation: rotate 2s linear infinite;
+}
+
+/* ====== أنيميشن التحميل ====== */
+.loading {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border: 3px solid var(--gray-light);
+    border-radius: 50%;
+    border-top-color: var(--primary);
+    animation: rotate 1s linear infinite;
+}
+
+/* ====== أنيميشن الظهور التدريجي ====== */
+.stagger-animation > * {
+    opacity: 0;
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.stagger-animation > *:nth-child(1) { animation-delay: 0.1s; }
+.stagger-animation > *:nth-child(2) { animation-delay: 0.2s; }
+.stagger-animation > *:nth-child(3) { animation-delay: 0.3s; }
+.stagger-animation > *:nth-child(4) { animation-delay: 0.4s; }
+.stagger-animation > *:nth-child(5) { animation-delay: 0.5s; }
+
+/* ====== أنيميشن الـ Hover ====== */
+.hover-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.hover-grow {
+    transition: transform 0.3s ease;
+}
+
+.hover-grow:hover {
+    transform: scale(1.05);
+}
+
+.hover-color {
+    transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+/* ====== أنيميشن التنقل ====== */
+.nav-link {
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--primary);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+}
+
+.nav-link:hover::after {
+    transform: translateX(0);
+}
+
+.nav-link.active::after {
+    transform: translateX(0);
+}
+
+/* ====== أنيميشن العداد ====== */
+.counter {
+    font-variant-numeric: tabular-nums;
+}
+
+/* ====== أنيميشن الشريط التقدمي ====== */
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background-color: var(--gray-light);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: var(--primary);
+    border-radius: 4px;
+    transition: width 1s ease-in-out;
+}
+
+/* ====== أنيميشن الرسائل ====== */
+.message {
+    animation: slideInFromRight 0.3s ease-out,
+               fadeInUp 0.3s ease-out;
+}
+
+.message-exit {
+    animation: slideInFromRight 0.3s ease-out reverse,
+               fadeInUp 0.3s ease-out reverse;
+}
+
+/* ====== أنيميشن الصفحات ====== */
+.page-enter {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+.page-exit {
+    animation: fadeInUp 0.5s ease-out reverse;
+}

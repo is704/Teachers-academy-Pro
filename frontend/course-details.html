@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل الدورة</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <style>
+        .course-details {
+            padding: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .course-hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+        .enroll-btn {
+            background: #f39c12;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="navbar"></div>
+    
+    <div class="course-details">
+        <div id="course-content">
+            <p>جاري تحميل تفاصيل الدورة...</p>
+        </div>
+    </div>
+    
+    <div id="footer"></div>
+    
+    <script>
+        // الحصول على ID الدورة من الرابط
+        const courseId = window.location.pathname.split('/').pop();
+        
+        async function loadCourseDetails() {
+            try {
+                const response = await fetch(`/api/courses/${courseId}`);
+                const course = await response.json();
+                
+                document.getElementById('course-content').innerHTML = `
+                    <div class="course-hero">
+                        <h1>${course.title}</h1>
+                        <p>${course.description}</p>
+                        <button class="enroll-btn" onclick="enrollCourse('${course._id}')">
+                            سجل في هذه الدورة - ${course.price} ريال
+                        </button>
+                    </div>
+                    
+                    <div class="course-info">
+                        <h2>معلومات الدورة</h2>
+                        <p><strong>المدرب:</strong> ${course.instructor?.name}</p>
+                        <p><strong>المستوى:</strong> ${course.level}</p>
+                        <p><strong>المدة:</strong> ${course.duration}</p>
+                        <p><strong>الفئة:</strong> ${course.category}</p>
+                    </div>
+                    
+                    <div class="course-content">
+                        <h2>محتويات الدورة</h2>
+                        <p>${course.content || 'سيتم إضافة المحتوى قريباً'}</p>
+                    </div>
+                    
+                    <div class="reviews">
+                        <h2>التقييمات (${course.reviews?.length || 0})</h2>
+                        ${course.reviews?.map(review => `
+                            <div class="review">
+                                <p><strong>${review.userName}</strong>: ${review.rating} ⭐</p>
+                                <p>${review.comment}</p>
+                            </div>
+                        `).join('') || '<p>لا توجد تقييمات بعد</p>'}
+                    </div>
+                `;
+                
+                // تحديث عنوان الصفحة
+                document.title = course.title;
+            } catch (error) {
+                document.getElementById('course-content').innerHTML = 
+                    '<p class="error">حدث خطأ في تحميل تفاصيل الدورة</p>';
+            }
+        }
+        
+        function enrollCourse(courseId) {
+            if (!localStorage.getItem('token')) {
+                alert('يجب تسجيل الدخول أولاً');
+                window.location.href = '/login';
+                return;
+            }
+            
+            fetch('/api/enrollments', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('token')
+                },
+                body: JSON.stringify({ courseId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('تم التسجيل في الدورة بنجاح!');
+                window.location.href = '/dashboard';
+            })
+            .catch(error => {
+                alert('حدث خطأ في التسجيل');
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', loadCourseDetails);
+    </script>
+</body>
+</html>

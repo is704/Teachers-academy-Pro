@@ -1,0 +1,69 @@
+/* ====== شاشات صغيرة جداً (الهواتف) ====== */
+@media (max-width: 576px) {
+    .hero h1 {
+        font-size: 2rem;
+    }
+    
+    .hero p {
+        font-size: 1rem;
+    }
+    
+    .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+    
+    .course-card,
+    .feature-card {
+        padding: var(--space-sm);
+    }
+}
+
+/* ====== شاشات متوسطة (أجهزة لوحية) ====== */
+@media (min-width: 577px) and (max-width: 992px) {
+    .course-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ====== شاشات كبيرة (أجهزة كمبيوتر) ====== */
+@media (min-width: 993px) {
+    .course-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .features-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* ====== شاشات عالية الدقة ====== */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1140px;
+    }
+}
+
+/* ====== الطباعة ====== */
+@media print {
+    .header,
+    .footer,
+    .hero-buttons,
+    .btn {
+        display: none;
+    }
+    
+    body {
+        background: white;
+        color: black;
+    }
+    
+    .container {
+        max-width: 100%;
+        padding: 0;
+    }
+}

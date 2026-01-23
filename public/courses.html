@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة تعلم اللغة - نظام المهارات المتكامل</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* تصميم المهارات الأربع */
+        .skills-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .skill-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .skill-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        
+        .skill-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* نظام التصفية */
+        .filters {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+        }
+        
+        .filter-btn {
+            padding: 0.5rem 1.5rem;
+            border: 2px solid #ddd;
+            background: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--secondary);
+            color: white;
+            border-color: var(--secondary);
+        }
+        
+        /* مساحات التدريب */
+        .training-space {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem;
+            border-radius: 20px;
+            margin: 3rem 0;
+            text-align: center;
+        }
+        
+        /* عرض ميزات النظام */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            border-right: 5px solid var(--secondary);
+        }
+    </style>
+</head>
+<body>
+    <!-- الهيدر -->
+    <div class="header">
+        <div class="container">
+            <h1>🎯 نظام تطوير المهارات اللغوية المتكامل</h1>
+            <p>مجاناً ومميزاً | طور مهاراتك اللغوية بطريقة مبتكرة</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- نظرة عامة على المهارات الأربع -->
+        <div class="skills-overview">
+            <div class="skill-card" onclick="showSkill('speaking')">
+                <div class="skill-icon">🗣️</div>
+                <h3>التحدث والاستماع</h3>
+                <p>التواصل المباشر عبر منصتنا التفاعلية</p>
+                <small>مجاني + مميز</small>
+            </div>
+            
+            <div class="skill-card" onclick="showSkill('writing')">
+                <div class="skill-icon">✍️</div>
+                <h3>الكتابة والتعبير</h3>
+                <p>مساحة للتدرب مع التصحيح التلقائي واليدوي</p>
+                <small>مجاني + مميز</small>
+            </div>
+            
+            <div class="skill-card" onclick="showSkill('reading')">
+                <div class="skill-icon">📖</div>
+                <h3>القراءة والفهم</h3>
+                <p>مكتبة نصوص متنوعة مع تمارين الفهم</p>
+                <small>مجاني + مميز</small>
+            </div>
+            
+            <div class="skill-card" onclick="showSkill('all')">
+                <div class="skill-icon">🏆</div>
+                <h3>الحزمة المتكاملة</h3>
+                <p>جميع المهارات معاً بخصم خاص</p>
+                <small>1200 درهم/شهر</small>
+            </div>
+        </div>
+
+        <!-- نظام التصفية -->
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">جميع الدورات</button>
+            <button class="filter-btn" data-filter="free">الدورات المجانية</button>
+            <button class="filter-btn" data-filter="premium">الدورات المميزة</button>
+            <button class="filter-btn" data-filter="speaking">التحدث</button>
+            <button class="filter-btn" data-filter="writing">الكتابة</button>
+            <button class="filter-btn" data-filter="reading">القراءة</button>
+            <button class="filter-btn" data-filter="listening">الاستماع</button>
+        </div>
+
+        <!-- عرض الدورات -->
+        <div id="courses-container">
+            <!-- سيتم ملؤه بالدورات من JavaScript -->
+            <p style="text-align: center; padding: 3rem;">جاري تحميل الدورات...</p>
+        </div>
+
+        <!-- شرح النظام التفصيلي -->
+        <div class="features-grid">
+            <!-- نظام التحدث -->
+            <div class="skill-section speaking-section">
+                <h2>🗣️ نظام التحدث والاستماع</h2>
+                <h3>المجاني:</h3>
+                <ul>
+                    <li>دروس نطق مسجلة</li>
+                    <li>تمارين استماع قصيرة</li>
+                    <li>محادثات مع روبوت ذكي</li>
+                    <li>تسجيلات صوتية للتقييم الذاتي</li>
+                </ul>
+                
+                <h3>المميز:</h3>
+                <ul>
+                    <li>جلسات مباشرة مع مدربين</li>
+                    <li>نوادي محادثة جماعية</li>
+                    <li>محاكاة مقابلات حقيقية</li>
+                    <li>تحليل صوتي متقدم</li>
+                </ul>
+            </div>
+
+            <!-- نظام الكتابة -->
+            <div class="skill-section writing-section">
+                <h2>✍️ نظام الكتابة والتعبير</h2>
+                <h3>المجاني:</h3>
+                <ul>
+                    <li>تمارين إملاء وقواعد</li>
+                    <li>تصحيح تلقائي للكتابة</li>
+                    <li>نماذج كتابية جاهزة</li>
+                    <li>مسودة كتابة مع حفظ</li>
+                </ul>
+                
+                <h3>المميز:</h3>
+                <ul>
+                    <li>تصحيح يدوي من خبراء اللغة</li>
+                    <li>ورش كتابة تفاعلية</li>
+                    <li>تقييم الأسلوب والتراكيب</li>
+                    <li>تدريب على أنواع الكتابة المختلفة</li>
+                </ul>
+            </div>
+
+            <!-- نظام القراءة -->
+            <div class="skill-section reading-section">
+                <h2>📖 نظام القراءة والفهم</h2>
+                <h3>المجاني:</h3>
+                <ul>
+                    <li>مكتبة نصوص متنوعة المستويات</li>
+                    <li>تمارين فهم المقروء</li>
+                    <li>قارئ ذكي مع نطق</li>
+                    <li>مسابقات قراءة أسبوعية</li>
+                </ul>
+                
+                <h3>المميز:</h3>
+                <ul>
+                    <li>نصوص أدبية وعلمية متقدمة</li>
+                    <li>تحليل النصوص مع مدرسين</li>
+                    <li>مناقشات جماعية حول النصوص</li>
+                    <li>تدريبات القراءة النقدية</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- مساحة التدريب التفاعلية -->
+        <div class="training-space">
+            <h2>🚀 ابدأ رحلتك التعليمية الآن!</h2>
+            <p>انضم إلى آلاف الطلاب الذين طوروا مهاراتهم اللغوية معنا</p>
+            
+            <div style="margin-top: 2rem;">
+                <a href="/register" class="btn btn-free" style="margin: 0.5rem;">سجل مجاناً</a>
+                <a href="/premium" class="btn btn-premium" style="margin: 0.5rem;">اشترك في الباقة المميزة</a>
+            </div>
+            
+            <p style="margin-top: 1rem; opacity: 0.9;">
+                <small>⭐ 4.8/5 تقييم من 2500 طالب | 📚 80+ دورة | 👨‍🏫 50+ مدرب معتمد</small>
+            </p>
+        </div>
+    </div>
+
+    <script src="/js/app.js"></script>
+    <script>
+        // دالة لعرض مهارة محددة
+        function showSkill(skill) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`[data-filter="${skill}"]`).classList.add('active');
+            
+            if (window.LanguageApp) {
+                window.LanguageApp.filterCourses(skill);
+            }
+        }
+        
+        // تفعيل أزرار التصفية
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const filter = this.dataset.filter;
+                    if (window.LanguageApp) {
+                        window.LanguageApp.filterCourses(filter);
+                    }
+                });
+            });
+            
+            // تحميل الدورات أول مرة
+            if (window.LanguageApp) {
+                window.LanguageApp.loadCourses();
+            }
+        });
+    </script>
+</body>
+</html>

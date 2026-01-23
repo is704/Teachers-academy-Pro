@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الدورات التعليمية</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <style>
+        .courses-container {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .course-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .course-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .course-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+        }
+        .course-price {
+            background: #3498db;
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- تضمين شريط التنقل -->
+    <div id="navbar"></div>
+
+    <div class="courses-container">
+        <h1>الدورات التعليمية المتاحة</h1>
+        <div id="courses-list">
+            <!-- سيتم ملؤه بالدورات من API -->
+            <p>جاري تحميل الدورات...</p>
+        </div>
+    </div>
+
+    <!-- تضمين التذييل -->
+    <div id="footer"></div>
+
+    <script>
+        // جلب البيانات من API
+        async function loadCourses() {
+            try {
+                const response = await fetch('/api/courses');
+                const courses = await response.json();
+                
+                const coursesList = document.getElementById('courses-list');
+                coursesList.innerHTML = '';
+                
+                courses.forEach(course => {
+                    const courseCard = document.createElement('div');
+                    courseCard.className = 'course-card';
+                    courseCard.innerHTML = `
+                        <div class="course-header">
+                            <h2 class="course-title">${course.title}</h2>
+                            <span class="course-price">${course.price} ريال</span>
+                        </div>
+                        <p>${course.description}</p>
+                        <p><strong>المدرب:</strong> ${course.instructor?.name || 'غير محدد'}</p>
+                        <p><strong>المستوى:</strong> ${course.level}</p>
+                        <p><strong>التقييم:</strong> ${course.rating || 'لا يوجد'}</p>
+                        <a href="/course/${course._id}" class="btn btn-primary">عرض التفاصيل</a>
+                    `;
+                    coursesList.appendChild(courseCard);
+                });
+            } catch (error) {
+                document.getElementById('courses-list').innerHTML = 
+                    '<p class="error">حدث خطأ في تحميل الدورات</p>';
+                console.error('Error loading courses:', error);
+            }
+        }
+        
+        // تحميل الدورات عند فتح الصفحة
+        document.addEventListener('DOMContentLoaded', loadCourses);
+    </script>
+</body>
+</html>

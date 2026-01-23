@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - منصة تعلم اللغة</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .dashboard {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .dashboard-header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 0.5rem 0;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 1rem 2rem;
+            background: #f8f9fa;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .tab.active {
+            background: #3498db;
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .course-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #ecf0f1;
+            border-radius: 5px;
+            margin: 0.5rem 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #2ecc71;
+            border-radius: 5px;
+        }
+        
+        .profile-form input, .profile-form select, .profile-form textarea {
+            width: 100%;
+            padding: 0.8rem;
+            margin: 0.5rem 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- شريط التنقل -->
+    <div class="nav">
+        <a href="/">🏠 الرئيسية</a>
+        <a href="/courses.html">📚 الدورات</a>
+        <a href="/dashboard.html" class="active">👤 لوحة التحكم</a>
+        <button onclick="logout()" style="background: #e74c3c; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px;">تسجيل الخروج</button>
+    </div>
+
+    <div class="dashboard">
+        <!-- الهيدر -->
+        <div class="dashboard-header">
+            <h1>مرحباً, <span id="userName">...</span></h1>
+            <p id="userEmail">...</p>
+            <div id="subscriptionStatus" class="tag" style="background: #f39c12; color: white; display: inline-block; padding: 0.3rem 1rem; border-radius: 20px;">
+                حساب مجاني
+            </div>
+        </div>
+
+        <!-- الإحصائيات -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div>الدورات النشطة</div>
+                <div class="stat-number" id="activeCourses">0</div>
+            </div>
+            
+            <div class="stat-card">
+                <div>الدورات المكتملة</div>
+                <div class="stat-number" id="completedCourses">0</div>
+            </div>
+            
+            <div class="stat-card">
+                <div>ساعات التعلم</div>
+                <div class="stat-number" id="studyHours">0</div>
+                <div>ساعة</div>
+            </div>
+            
+            <div class="stat-card">
+                <div>متوسط التقدم</div>
+                <div class="stat-number" id="avgProgress">0%</div>
+            </div>
+        </div>
+
+        <!-- التبويبات -->
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('courses')">دوراتي</button>
+            <button class="tab" onclick="showTab('profile')">الملف الشخصي</button>
+            <button class="tab" onclick="showTab('progress')">التقدم</button>
+            <button class="tab" onclick="showTab('settings')">الإعدادات</button>
+            <button class="tab" onclick="showTab('certificates')">الشهادات</button>
+        </div>
+
+        <!-- محتوى التبويبات -->
+        
+        <!-- تبويب الدورات -->
+        <div id="courses-tab" class="tab-content active">
+            <h2>الدورات المسجلة</h2>
+            <div id="coursesList">
+                <p>جاري تحميل الدورات...</p>
+            </div>
+            
+            <div style="text-align: center; margin: 2rem 0;">
+                <a href="/courses.html" class="btn btn-primary">تصفح المزيد من الدورات</a>
+            </div>
+        </div>
+
+        <!-- تبويب الملف الشخصي -->
+        <div id="profile-tab" class="tab-content">
+            <h2>الملف الشخصي</h2>
+            <form class="profile-form" id="profileForm">
+                <input type="text" id="name" placeholder="الاسم الكامل">
+                <input type="email" id="email" placeholder="البريد الإلكتروني" disabled>
+                
+                <label>مستوى اللغة:</label>
+                <select id="languageLevel">
+                    <option value="beginner">مبتدئ</option>
+                    <option value="intermediate">متوسط</option>
+                    <option value="advanced">متقدم</option>
+                    <option value="native">ناطق أصلي</option>
+                </select>
+                
+                <label>نبذة عنك:</label>
+                <textarea id="bio" rows="4" placeholder="اكتب نبذة عن نفسك..."></textarea>
+                
+                <label>أهداف التعلم:</label>
+                <div>
+                    <label><input type="checkbox" name="goals" value="speaking"> التحدث والطلاقة</label>
+                    <label><input type="checkbox" name="goals" value="listening"> الاستماع والفهم</label>
+                    <label><input type="checkbox" name="goals" value="writing"> الكتابة والتعبير</label>
+                    <label><input type="checkbox" name="goals" value="reading"> القراءة والفهم</label>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">حفظ التغييرات</button>
+            </form>
+        </div>
+
+        <!-- تبويب التقدم -->
+        <div id="progress-tab" class="tab-content">
+            <h2>تقدمك الدراسي</h2>
+            <div id="progressChart">
+                <p>مخطط التقدم سيظهر هنا...</p>
+            </div>
+            
+            <h3 style="margin-top: 2rem;">آخر النشاطات</h3>
+            <div id="recentActivity">
+                <p>لا توجد نشاطات حديثة</p>
+            </div>
+        </div>
+
+        <!-- تبويب الإعدادات -->
+        <div id="settings-tab" class="tab-content">
+            <h2>الإعدادات</h2>
+            <form id="settingsForm">
+                <h3>الإشعارات</h3>
+                <label><input type="checkbox" id="emailNotifications"> إشعارات البريد الإلكتروني</label><br>
+                <label><input type="checkbox" id="pushNotifications"> إشعارات الموقع</label>
+                
+                <h3 style="margin-top: 2rem;">تحديث كلمة المرور</h3>
+                <input type="password" id="currentPassword" placeholder="كلمة المرور الحالية">
+                <input type="password" id="newPassword" placeholder="كلمة المرور الجديدة">
+                <input type="password" id="confirmPassword" placeholder="تأكيد كلمة المرور">
+                
+                <button type="button" onclick="updatePassword()" class="btn" style="background: #2c3e50; margin-top: 1rem;">تحديث كلمة المرور</button>
+                
+                <h3 style="margin-top: 2rem;">الحساب</h3>
+                <button type="button" onclick="upgradeAccount()" class="btn btn-premium">ترقية للحساب المميز</button>
+            </form>
+        </div>
+
+        <!-- تبويب الشهادات -->
+        <div id="certificates-tab" class="tab-content">
+            <h2>شهاداتك</h2>
+            <div id="certificatesList">
+                <p>لم تحصل على شهادات بعد. أكمل دوراتك للحصول على شهادات!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // التحقق من تسجيل الدخول
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = '/login.html';
+        }
+
+        // بيانات المستخدم
+        let userData = null;
+        let dashboardData = null;
+
+        // تحميل بيانات اللوحة
+        async function loadDashboard() {
+            try {
+                const response = await fetch('/api/dashboard', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    dashboardData = data;
+                    userData = data.user;
+                    updateDashboard(data);
+                } else {
+                    localStorage.removeItem('token');
+                    window.location.href = '/login.html';
+                }
+            } catch (error) {
+                console.error('خطأ في تحميل اللوحة:', error);
+            }
+        }
+
+        // تحديث واجهة اللوحة
+        function updateDashboard(data) {
+            // المعلومات الشخصية
+            document.getElementById('userName').textContent = data.user.name;
+            document.getElementById('userEmail').textContent = data.user.email;
+            
+            // حالة الاشتراك
+            const subscriptionTag = document.getElementById('subscriptionStatus');
+            subscriptionTag.textContent = data.user.subscription.type === 'free' ? 'حساب مجاني' : 'حساب مميز';
+            subscriptionTag.style.background = data.user.subscription.type === 'free' ? '#f39c12' : '#e74c3c';
+            
+            // الإحصائيات
+            document.getElementById('activeCourses').textContent = data.stats.totalCourses;
+            document.getElementById('completedCourses').textContent = data.stats.completedCourses;
+            document.getElementById('studyHours').textContent = Math.floor(data.stats.totalStudyTime / 60);
+            document.getElementById('avgProgress').textContent = `${Math.round(data.stats.averageProgress)}%`;
+            
+            // تحديث الملف الشخصي
+            document.getElementById('name').value = data.user.name;
+            document.getElementById('email').value = data.user.email;
+            document.getElementById('languageLevel').value = data.user.profile?.languageLevel || 'beginner';
+            document.getElementById('bio').value = data.user.profile?.bio || '';
+            
+            // تحديث أهداف التعلم
+            const goalsCheckboxes = document.querySelectorAll('input[name="goals"]');
+            goalsCheckboxes.forEach(checkbox => {
+                checkbox.checked = data.user.learningGoals?.[checkbox.value] || false;
+            });
+            
+            // تحديث الدورات
+            updateCoursesList(data.currentCourses);
+        }
+
+        // تحديث قائمة الدورات
+        function updateCoursesList(courses) {
+            const container = document.getElementById('coursesList');
+            
+            if (!courses || courses.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; background: #f8f9fa; border-radius: 10px;">
+                        <p>لم تسجل في أي دورات بعد</p>
+                        <a href="/courses.html" class="btn btn-primary">تصفح الدورات</a>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '';
+            courses.forEach(course => {
+                html += `
+                    <div class="course-item">
+                        <div>
+                            <h4>${course.courseId || 'دورة'}</h4>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${course.progress || 0}%"></div>
+                            </div>
+                            <small>${course.progress || 0}% مكتمل</small>
+                        </div>
+                        <div>
+                            <button class="btn" onclick="continueCourse('${course.courseId}')">استمر في التعلم</button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // التبديل بين التبويبات
+        function showTab(tabName) {
+            // إخفاء جميع المحتويات
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // إزالة النشط من جميع الأزرار
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // إظهار المحتوى المطلوب
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            
+            // تعيين الزر كنشط
+            event.target.classList.add('active');
+        }
+
+        // تحديث الملف الشخصي
+        document.getElementById('profileForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('name').value,
+                profile: {
+                    languageLevel: document.getElementById('languageLevel').value,
+                    bio: document.getElementById('bio').value
+                },
+                learningGoals: {}
+            };
+            
+            // جمع أهداف التعلم
+            document.querySelectorAll('input[name="goals"]:checked').forEach(checkbox => {
+                formData.learningGoals[checkbox.value] = true;
+            });
+            
+            try {
+                const response = await fetch('/api/user/profile', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await response.json();
+                if (data.success) {
+                    alert('تم تحديث الملف الشخصي بنجاح');
+                    loadDashboard(); // إعادة تحميل البيانات
+                }
+            } catch (error) {
+                alert('حدث خطأ في تحديث الملف الشخصي');
+            }
+        });
+
+        // تسجيل الخروج
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/';
+        }
+
+        // ترقية الحساب
+        function upgradeAccount() {
+            window.location.href = '/courses.html?upgrade=true';
+        }
+
+        // تحديث كلمة المرور
+        async function updatePassword() {
+            const current = document.getElementById('currentPassword').value;
+            const newPass = document.getElementById('newPassword').value;
+            const confirm = document.getElementById('confirmPassword').value;
+            
+            if (newPass !== confirm) {
+                alert('كلمة المرور الجديدة غير متطابقة');
+                return;
+            }
+            
+            if (newPass.length < 6) {
+                alert('كلمة المرور يجب أن تكون 6 أحرف على الأقل');
+                return;
+            }
+            
+            // هنا يمكن إضافة API لتحديث كلمة المرور
+            alert('سيتم إضافة هذه الميزة قريباً');
+        }
+
+        // تحميل اللوحة عند فتح الصفحة
+        document.addEventListener('DOMContentLoaded', loadDashboard);
+    </script>
+</body>
+</html>
